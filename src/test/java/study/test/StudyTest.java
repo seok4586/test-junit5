@@ -7,6 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTimeoutPreemptively;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
+import static org.junit.jupiter.api.Assumptions.assumingThat;
 
 import java.time.Duration;
 
@@ -18,6 +20,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
+import org.junit.jupiter.api.condition.EnabledOnJre;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.JRE;
+import org.junit.jupiter.api.condition.OS;
 
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -25,7 +32,24 @@ public class StudyTest {
 
 	@Test
 	@DisplayName("첫 테스트 생성")
+	@EnabledOnOs(OS.MAC)
+	@EnabledOnJre(JRE.JAVA_8)
+	@EnabledIfEnvironmentVariable(named = "TEST_ENV",matches = "local")
 	void create_new_one() {
+		
+		String test_env = System.getenv("TEST_ENV");
+		System.out.println(test_env);
+		//	ture 일때만 밑에 코드가 실행됨.
+//		assumeTrue("LOCAL".equalsIgnoreCase(test_env));
+		
+		assumingThat(test_env == null, () -> {
+			System.out.println("null 이다.");
+		});
+		
+		assumingThat("LOCAL".equalsIgnoreCase(test_env), () -> {
+			IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, ()->new Study(-10));
+			assertEquals("limit은 0보다 커야 한다.", exception.getMessage());
+		});
 		// TODO	복습.
 		assertTimeout(Duration.ofSeconds(1), () -> {
 				new Study(10); 
