@@ -19,10 +19,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.RepetitionInfo;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.condition.EnabledOnJre;
 import org.junit.jupiter.api.condition.EnabledOnOs;
@@ -45,14 +50,18 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+// static 일 필요가 없다.
+@TestInstance(Lifecycle.PER_CLASS)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudyTest {
-
-	
+	//	각 메소드마다 다른 인스턴스를 가지고 있고 메소드마다 의존성은 없다.
+		
 	@Test
 	@FastTest
 //	@Tag("fast")
+	@Order(1)
 	void create_new() {
-		
+
 	}
 	
 	@Test
@@ -63,6 +72,7 @@ public class StudyTest {
 	}
 	@DisplayName("study make")
 	@RepeatedTest(value=10,name = "{displayName},{currentRepetition}/{totalRepetitions}")
+	@Order(2)
 	void repeatTest(RepetitionInfo info) {
 		System.out.println("test" + info.getCurrentRepetition() + "/ " + 
 				info.getTotalRepetitions());
@@ -178,12 +188,12 @@ public class StudyTest {
 //	}
 	
 	@BeforeAll
-	static void beforeAll() {
+	void beforeAll() {
 		System.out.println("before all");
 	}
 	
 	@AfterAll
-	static void afterAll() {
+	void afterAll() {
 		System.out.println("after all");
 	}
 	
