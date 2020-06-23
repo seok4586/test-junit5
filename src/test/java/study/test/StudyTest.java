@@ -49,29 +49,30 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+//@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 // static 일 필요가 없다.
-@TestInstance(Lifecycle.PER_CLASS)
+//@TestInstance(Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class StudyTest {
 	//	각 메소드마다 다른 인스턴스를 가지고 있고 메소드마다 의존성은 없다.
-		
+	int value = 1;
+	
 	@Test
 	@FastTest
 //	@Tag("fast")
 	@Order(1)
 	void create_new() {
-
+		System.out.println(value++);
 	}
 	
 	@Test
 	@SlowTest
 //	@Tag("slow")
 	void create_new_two() {
-		
+		System.out.println(value++);
 	}
 	@DisplayName("study make")
-	@RepeatedTest(value=10,name = "{displayName},{currentRepetition}/{totalRepetitions}")
+	@RepeatedTest(value=1,name = "{displayName},{currentRepetition}/{totalRepetitions}")
 	@Order(2)
 	void repeatTest(RepetitionInfo info) {
 		System.out.println("test" + info.getCurrentRepetition() + "/ " + 
