@@ -48,6 +48,8 @@ import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import study.test.domain.Study;
+
 
 //@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 // static 일 필요가 없다.
